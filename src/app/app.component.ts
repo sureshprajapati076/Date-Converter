@@ -15,11 +15,16 @@ export class AppComponent {
   validateGivenDateAndConvert(type) {
     this.result = []
     let yy, mm, dd;
+
     if (type == 'BS') {
       let splitted = this.bsDate.split('/');
       yy = splitted[0];
       mm = splitted[1];
       dd = splitted[2];
+      if (isNaN(Number(yy)) || isNaN(Number(mm)) || isNaN(Number(dd))) {
+        this.result.push("Please Enter valid Date Format (yyyy/m/d)")
+        return;
+      }
       if (this.validateBS(yy, mm, dd))
         this.convert(yy, mm, dd, type);
     } else if (type == 'AD') {
@@ -27,13 +32,27 @@ export class AppComponent {
       yy = splitted[0];
       mm = splitted[1];
       dd = splitted[2];
+      if (isNaN(Number(yy)) || isNaN(Number(mm)) || isNaN(Number(dd))) {
+        this.result.push("Please Enter valid Date Format (yyyy/m/d)")
+        return;
+      }
+
       if (this.validateAD(yy, mm, dd))
         this.convert(yy, mm, dd, type);
     }
   }
-  validateAD(yy, mm, dd) {
-    if (yy < 1943 || yy > 2043 || mm > 12 || mm < 1 || dd < 1 || dd > 31) {
+  validateAD(yy, mm, dd) {   // 14-Apr-1943  2000 Baisakh 1 
+
+    if (yy < 1943 || yy > 2044 || mm > 12 || mm < 1 || dd < 1 || dd > 31) {
       this.result.push("Invalid Date ( Date Must be between 1943 - 2043 A.D.)");
+      return false;
+    }
+    if (yy <= 1943 && mm < 4 || yy <= 1943 && mm <= 4 && dd < 14) {
+      this.result.push("Min Date is 14-April-1943");
+      return false;
+    }
+    if ((yy >= 2044 && mm > 4) || (yy >= 2044 && mm >= 4 && dd > 20)) {
+      this.result.push("Max Date is April-20-2044")
       return false;
     }
     if (this.leapYear(yy) && mm == 2) {
@@ -71,6 +90,23 @@ export class AppComponent {
     let bs_month = 1;
     let bs_day = 1;
     do {
+
+
+      if (type == 'BS' && bs_year == yy && bs_month == mm && bs_day == dd) {
+        this.result.push("BS: " + bs_year + "/" + bs_month + "/" + bs_day)
+        this.result.push("AD: " + ad_year + "/" + ad_month + "/" + ad_day)
+        this.result.push(this.day_ofWeek[numOfDays % 7])
+        break;
+      }
+      else if (type == 'AD' && ad_year == yy && ad_month == mm && ad_day == dd) {
+        this.result.push("AD: " + ad_year + "/" + ad_month + "/" + ad_day)
+        this.result.push("BS: " + bs_year + "/" + bs_month + "/" + bs_day)
+        this.result.push(this.day_ofWeek[numOfDays % 7])
+        break;
+      }
+
+
+
       numOfDays++;
       ad_day++;
       bs_day++;
@@ -96,18 +132,7 @@ export class AppComponent {
         }
         bs_day = 1;
       }
-      if (type == 'BS' && bs_year == yy && bs_month == mm && bs_day == dd) {
-        this.result.push("BS: " + bs_year + "/" + bs_month + "/" + bs_day)
-        this.result.push("AD: " + ad_year + "/" + ad_month + "/" + ad_day)
-        this.result.push(this.day_ofWeek[numOfDays % 7])
-        break;
-      }
-      else if (type == 'AD' && ad_year == yy && ad_month == mm && ad_day == dd) {
-        this.result.push("AD: " + ad_year + "/" + ad_month + "/" + ad_day)
-        this.result.push("BS: " + bs_year + "/" + bs_month + "/" + bs_day)
-        this.result.push(this.day_ofWeek[numOfDays % 7])
-        break;
-      }
+
     } while (true);
   }
   leapYear(year) {

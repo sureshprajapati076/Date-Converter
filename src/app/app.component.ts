@@ -6,34 +6,32 @@ import { BSDatesConstants } from './bs_data';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  yearBS = 2000;
+  monthBS = 1;
+  dayBS = 1;
+  months: String[] = ["BAISHAKH", "JESTHA", "ASAR", "SHRAWAN", "BHADRA", "ASOJ", "KARTIK", "MANSIR", "PUSH", "MAGH", "FALGUN", "CHAITRA"];
   result: String[] = []
-  bsDate: String;
-  adDate: String;
+
+  adDate: Date;
   lookup = BSDatesConstants.data;
   ad_months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   day_ofWeek = ["WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY", "MONDAY", "TUESDAY"];
   validateGivenDateAndConvert(type) {
+
     this.result = []
     let yy, mm, dd;
-
     if (type == 'BS') {
-      let splitted = this.bsDate.split('/');
+      if (this.validateBS(this.yearBS, this.monthBS, this.dayBS))
+        this.convert(this.yearBS, this.monthBS, this.dayBS, type);
+    } else if (type == 'AD' && this.adDate != undefined) {
+      let splitted = this.adDate.toString().split("-");
+
+
       yy = splitted[0];
       mm = splitted[1];
       dd = splitted[2];
       if (isNaN(Number(yy)) || isNaN(Number(mm)) || isNaN(Number(dd))) {
-        this.result.push("Please Enter valid Date Format (yyyy/m/d)")
-        return;
-      }
-      if (this.validateBS(yy, mm, dd))
-        this.convert(yy, mm, dd, type);
-    } else if (type == 'AD') {
-      let splitted = this.adDate.split('/');
-      yy = splitted[0];
-      mm = splitted[1];
-      dd = splitted[2];
-      if (isNaN(Number(yy)) || isNaN(Number(mm)) || isNaN(Number(dd))) {
-        this.result.push("Please Enter valid Date Format (yyyy/m/d)")
+        this.result.push("Please Enter valid Date Format (mm/dd/yyyy)")
         return;
       }
 

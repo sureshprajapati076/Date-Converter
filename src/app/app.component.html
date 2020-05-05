@@ -1,13 +1,68 @@
-<div style="position: relative; top: 300px; width: 90%; margin:0 auto;text-align: center;">
-  Enter Date in BS: <input (change)="bsDate=$event.target.value" placeholder="yyyy/m/d" />
-  <button (click)="validateGivenDateAndConvert('BS')">Convert to AD</button><br />
-  Enter Date in AD: <input (change)="adDate=$event.target.value" placeholder="yyyy/m/d" />
-  <button (click)="validateGivenDateAndConvert('AD')">Convert to BS</button>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
-  <h4>Output:</h4>
-  <div *ngIf="result.length>0">
-    <h5 *ngFor="let data of result">
-      {{data}}
-    </h5>
+<div class="container text-center">
+  <div class="">
+    <h3>Enter Date in BS:</h3>
+    <div class="form-row">
+      <div class="form-group col-4">
+        <label for="inputState">YEAR</label>
+
+        <select [(ngModel)]="yearBS" class="form-control">
+          <option *ngFor="let data of lookup;let i=index" [value]="data[0]">
+            {{data[0]}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group col-5">
+        <label for="inputState">MONTH</label>
+        <select [(ngModel)]="monthBS" class="form-control">
+          <option *ngFor="let month of months let i = index" [value]="i+1">
+            {{month}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group col-3">
+        <label for="inputState">DAY</label>
+        <select [(ngModel)]="dayBS" class="form-control">
+          <option *ngFor="let data of ' '.repeat(32).split(''), let i = index" [value]="i+1">
+            {{i+1}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+
+
+
+
+
+
+    <button type="button" class="btn btn-success" (click)="validateGivenDateAndConvert('BS')">Convert to
+      AD</button><br />
+    <p></p>
+    <h3>Enter Date in AD:</h3>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">AD</span>
+      </div>
+      <input type="date" class="form-control" aria-label="Username" (change)="adDate=$event.target.value"
+        aria-describedby="basic-addon1">
+    </div>
+
+
+
+
+    <button type="button" class="btn btn-info" (click)="validateGivenDateAndConvert('AD')">Convert to BS</button>
+    <p>&nbsp;</p>
+
+    <h4>Output:</h4>
+    <div *ngIf="result.length>0">
+      <h5 *ngFor="let data of result">
+        {{data}}
+      </h5>
+    </div>
+
   </div>
-</div>
